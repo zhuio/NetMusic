@@ -12,10 +12,6 @@ class PlayList:
         print(id)
         j = requests.get('https://api.imjad.cn/cloudmusic/?type=playlist&id=' + id).json()
         ll = len(j['privileges'])
-        # # 歌手名字列表
-        # singer_name = []
-        # for i in range(0,ll):
-        #     singer_name.append(str(j['playlist']['tracks'][i]['ar'][0]['name']))
 
         # 歌曲名字列表
         song_name = []
@@ -57,22 +53,24 @@ class PlayList:
         for key in self.dicts:
             if self.dicts[key] == None:
                 print('这首%s有版权问题' % key)
-                # continue
+
             elif os.path.exists(directory+'/'+'%s.mp3' % key):
                 print('已经下载过这首歌曲了，跳过......')
-                # continue
+
             else:
                 try:
                     r = requests.get(self.dicts[key])
                 except Exception as e:
                     print(self.dicts[key])
                     raise e
-                # finally:
-                #     continue
 
                 print('开始下载%s到当前的文件夹' % key)
-                with open(directory+'/'+'%s.mp3' % key, 'wb') as f:
-                    f.write(r.content)
+                try:
+                    with open(directory+'/'+'%s.mp3' % key, 'wb') as f:
+                        f.write(r.content)
+                except Exception as e:
+                    print('歌曲名字中有‘/’')
+
         print('好像下载完成了呢！')
 
 
